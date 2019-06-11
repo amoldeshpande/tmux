@@ -16,12 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
 
 #include <errno.h>
-#include <glob.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "tmux.h"
 
@@ -47,6 +43,7 @@ const struct cmd_entry cmd_source_file_entry = {
 static enum cmd_retval
 cmd_source_file_exec(struct cmd *self, struct cmdq_item *item)
 {
+#if !_MSC_VER
 	struct args		*args = self->args;
 	int			 flags = 0;
 	struct client		*c = item->client;
@@ -94,6 +91,9 @@ cmd_source_file_exec(struct cmd *self, struct cmdq_item *item)
 
 	globfree(&g);
 	return (retval);
+#else
+	return CMD_RETURN_ERROR;
+#endif
 }
 
 static enum cmd_retval

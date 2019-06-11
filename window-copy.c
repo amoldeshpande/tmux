@@ -2147,7 +2147,7 @@ window_copy_search(struct window_mode_entry *wme, int direction)
 	fx = data->cx;
 	fy = screen_hsize(data->backing) - data->oy + data->cy;
 
-	screen_init(&ss, screen_write_strlen("%s", data->searchstr), 1, 0);
+	screen_init(&ss, (u_int)screen_write_strlen("%s", data->searchstr), 1, 0);
 	screen_write_start(&ctx, NULL, &ss);
 	screen_write_nputs(&ctx, -1, &grid_default_cell, "%s", data->searchstr);
 	screen_write_stop(&ctx);
@@ -2185,7 +2185,7 @@ window_copy_search_marks(struct window_mode_entry *wme, struct screen *ssp)
 	u_int				 px, py, b, nfound = 0, width;
 
 	if (ssp == NULL) {
-		width = screen_write_strlen("%s", data->searchstr);
+		width = (u_int)screen_write_strlen("%s", data->searchstr);
 		screen_init(&ss, width, 1, 0);
 		screen_write_start(&ctx, NULL, &ss);
 		screen_write_nputs(&ctx, -1, &grid_default_cell, "%s",
@@ -2302,7 +2302,7 @@ window_copy_write_line(struct window_mode_entry *wme,
 		}
 		if (size > screen_size_x(s))
 			size = screen_size_x(s);
-		screen_write_cursormove(ctx, screen_size_x(s) - size, 0, 0);
+		screen_write_cursormove(ctx, screen_size_x(s) - (u_int)size, 0, 0);
 		screen_write_puts(ctx, &gc, "%s", hdr);
 	} else
 		size = 0;
@@ -2311,7 +2311,7 @@ window_copy_write_line(struct window_mode_entry *wme,
 		screen_write_cursormove(ctx, 0, py, 0);
 		screen_write_copy(ctx, data->backing, 0,
 		    (screen_hsize(data->backing) - data->oy) + py,
-		    screen_size_x(s) - size, 1, data->searchmark, &gc);
+		    screen_size_x(s) - (u_int)size, 1, data->searchmark, &gc);
 	}
 
 	if (py == data->cy && data->cx == screen_size_x(s)) {
@@ -2658,7 +2658,7 @@ window_copy_copy_buffer(struct window_mode_entry *wme, const char *prefix,
 
 	if (options_get_number(global_options, "set-clipboard") != 0) {
 		screen_write_start(&ctx, wp, NULL);
-		screen_write_setselection(&ctx, buf, len);
+		screen_write_setselection(&ctx, buf, (u_int)len);
 		screen_write_stop(&ctx);
 		notify_pane("pane-set-clipboard", wp);
 	}
@@ -2710,7 +2710,7 @@ window_copy_append_selection(struct window_mode_entry *wme)
 
 	if (options_get_number(global_options, "set-clipboard") != 0) {
 		screen_write_start(&ctx, wp, NULL);
-		screen_write_setselection(&ctx, buf, len);
+		screen_write_setselection(&ctx, buf, (u_int)len);
 		screen_write_stop(&ctx);
 		notify_pane("pane-set-clipboard", wp);
 	}
@@ -2769,7 +2769,7 @@ window_copy_copy_line(struct window_mode_entry *wme, char **buf, size_t *off,
 			if (ud.size == 1 && (gc.attr & GRID_ATTR_CHARSET)) {
 				s = tty_acs_get(NULL, ud.data[0]);
 				if (s != NULL && strlen(s) <= sizeof ud.data) {
-					ud.size = strlen(s);
+					ud.size = (u_char)strlen(s);
 					memcpy(ud.data, s, ud.size);
 				}
 			}

@@ -83,7 +83,7 @@ cmd_show_options_exec(struct cmd *self, struct cmdq_item *item)
 	struct winlink			*wl = item->target.wl;
 	struct options			*oo;
 	enum options_table_scope	 scope;
-	char				*argument, *name = NULL, *cause;
+	char				*argument, *name = NULL, *cause = NULL;
 	const char			*target;
 	int				 window, idx, ambiguous;
 	struct options_entry		*o;

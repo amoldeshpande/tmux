@@ -22,8 +22,9 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
+#if !_MSC_VER
 #include <termios.h>
-#include <unistd.h>
+#endif
 
 #include "tmux.h"
 

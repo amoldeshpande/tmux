@@ -16,17 +16,6 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-#include <sys/uio.h>
-#include <sys/utsname.h>
-
-#include <errno.h>
-#include <event.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
 #include "tmux.h"
 
 struct tmuxproc {
@@ -161,7 +150,7 @@ proc_send(struct tmuxpeer *peer, enum msgtype type, int fd, const void *buf,
 		return (-1);
 	log_debug("sending message %d to peer %p (%zu bytes)", type, peer, len);
 
-	retval = imsg_compose(ibuf, type, PROTOCOL_VERSION, -1, fd, vp, len);
+	retval = imsg_compose(ibuf, type, PROTOCOL_VERSION,(pid_t) -1, fd, vp, (uint16_t)len);
 	if (retval != 1)
 		return (-1);
 	proc_update_event(peer);
@@ -210,6 +199,7 @@ proc_exit(struct tmuxproc *tp)
 void
 proc_set_signals(struct tmuxproc *tp, void (*signalcb)(int))
 {
+#if !_MSC_VER
 	struct sigaction	sa;
 
 	tp->signalcb = signalcb;
@@ -237,11 +227,13 @@ proc_set_signals(struct tmuxproc *tp, void (*signalcb)(int))
 	signal_add(&tp->ev_sigusr2, NULL);
 	signal_set(&tp->ev_sigwinch, SIGWINCH, proc_signal_cb, tp);
 	signal_add(&tp->ev_sigwinch, NULL);
+#endif
 }
 
 void
 proc_clear_signals(struct tmuxproc *tp, int defaults)
 {
+#if !_MSC_VER
 	struct sigaction	sa;
 
 	memset(&sa, 0, sizeof sa);
@@ -270,6 +262,7 @@ proc_clear_signals(struct tmuxproc *tp, int defaults)
 		sigaction(SIGUSR2, &sa, NULL);
 		sigaction(SIGWINCH, &sa, NULL);
 	}
+#endif
 }
 
 struct tmuxpeer *

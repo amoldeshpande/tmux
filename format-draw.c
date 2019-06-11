@@ -538,7 +538,7 @@ format_draw(struct screen_write_ctx *octx, const struct grid_cell *base,
 	 * and right markers.
 	 */
 	for (i = 0; i < TOTAL; i++) {
-		screen_init(&s[i], size, 1, 0);
+		screen_init(&s[i], (u_int)size, 1, 0);
 		screen_write_start(&ctx[i], NULL, &s[i]);
 		screen_write_clearendofline(&ctx[i], base->bg);
 		width[i] = 0;

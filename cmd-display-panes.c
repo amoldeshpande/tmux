@@ -119,11 +119,11 @@ cmd_display_panes_draw_pane(struct screen_redraw_ctx *ctx,
 	active_colour = options_get_number(oo, "display-panes-active-colour");
 
 	if (sx < len * 6 || sy < 5) {
-		tty_cursor(tty, xoff + px - len / 2, yoff + py);
+		tty_cursor(tty, xoff + px - (u_int)len / 2, yoff + py);
 		goto draw_text;
 	}
 
-	px -= len * 3;
+	px -= (u_int)len * 3;
 	py -= 2;
 
 	memcpy(&gc, &grid_default_cell, sizeof gc);
@@ -152,7 +152,7 @@ cmd_display_panes_draw_pane(struct screen_redraw_ctx *ctx,
 	len = xsnprintf(buf, sizeof buf, "%ux%u", wp->sx, wp->sy);
 	if (sx < len || sy < 6)
 		return;
-	tty_cursor(tty, xoff + sx - len, yoff);
+	tty_cursor(tty, xoff + sx - (u_int)len, yoff);
 
 draw_text:
 	memcpy(&gc, &grid_default_cell, sizeof gc);

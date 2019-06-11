@@ -18,13 +18,17 @@
 #define COMPAT_H
 
 #include <sys/types.h>
+#if !_MSC_VER
 #include <sys/ioctl.h>
 #include <sys/uio.h>
 
-#include <limits.h>
-#include <stdio.h>
 #include <termios.h>
 #include <wchar.h>
+#else
+#include <vc_compat.h>
+#endif // MSC_VER
+#include <limits.h>
+#include <stdio.h>
 
 #ifndef __GNUC__
 #define __attribute__(a)

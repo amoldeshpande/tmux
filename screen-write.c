@@ -1186,7 +1186,7 @@ screen_write_collect_clear(struct screen_write_ctx *ctx, u_int y, u_int n)
 			TAILQ_REMOVE(&ctx->list[i].items, ci, entry);
 			free(ci);
 		}
-		ctx->skipped += size;
+		ctx->skipped += (u_int)size;
 		log_debug("%s: dropped %zu bytes (line %u)", __func__, size, i);
 	}
 }
@@ -1258,7 +1258,7 @@ screen_write_collect_flush(struct screen_write_ctx *ctx, int scroll_only)
 	s->cx = cx; s->cy = cy;
 
 	log_debug("%s: flushed %u items (%zu bytes)", __func__, items, written);
-	ctx->written += written;
+	ctx->written += (u_int)written;
 }
 
 /* Finish and store collected cells. */

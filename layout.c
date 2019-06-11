@@ -297,6 +297,7 @@ layout_count_cells(struct layout_cell *lc)
 		return (count);
 	default:
 		fatalx("bad layout type");
+		return 0;
 	}
 }
 
@@ -603,7 +604,7 @@ layout_resize_pane_grow(struct window *w, struct layout_cell *lc,
     enum layout_type type, int needed, int opposite)
 {
 	struct layout_cell	*lcadd, *lcremove;
-	u_int			 size = 0;
+	int			 size = 0;
 
 	/* Growing. Always add to the current cell. */
 	lcadd = lc;
@@ -631,7 +632,7 @@ layout_resize_pane_grow(struct window *w, struct layout_cell *lc,
 		return (0);
 
 	/* Change the cells. */
-	if (size > (u_int) needed)
+	if (size >  needed)
 		size = needed;
 	layout_resize_adjust(w, lcadd, type, size);
 	layout_resize_adjust(w, lcremove, type, -size);
@@ -644,7 +645,7 @@ layout_resize_pane_shrink(struct window *w, struct layout_cell *lc,
     enum layout_type type, int needed)
 {
 	struct layout_cell	*lcadd, *lcremove;
-	u_int			 size;
+	int			 size;
 
 	/* Shrinking. Find cell to remove from by walking towards head. */
 	lcremove = lc;
@@ -663,7 +664,7 @@ layout_resize_pane_shrink(struct window *w, struct layout_cell *lc,
 		return (0);
 
 	/* Change the cells. */
-	if (size > (u_int) -needed)
+	if (size >  -needed)
 		size = -needed;
 	layout_resize_adjust(w, lcadd, type, size);
 	layout_resize_adjust(w, lcremove, type, -size);

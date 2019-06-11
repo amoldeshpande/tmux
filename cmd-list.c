@@ -65,7 +65,7 @@ cmd_list_parse(int argc, char **argv, const char *file, u_int line,
 		if (arglen != 1)
 			new_argc++;
 
-		cmd = cmd_parse(new_argc, new_argv, file, line, cause);
+		cmd = cmd_parse((int)new_argc, new_argv, file, line, cause);
 		if (cmd == NULL)
 			goto bad;
 		TAILQ_INSERT_TAIL(&cmdlist->list, cmd, qentry);

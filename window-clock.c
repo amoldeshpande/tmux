@@ -236,7 +236,7 @@ window_clock_draw_screen(struct window_mode_entry *wme)
 
 	if (screen_size_x(s) < 6 * strlen(tim) || screen_size_y(s) < 6) {
 		if (screen_size_x(s) >= strlen(tim) && screen_size_y(s) != 0) {
-			x = (screen_size_x(s) / 2) - (strlen(tim) / 2);
+			x = (screen_size_x(s) / 2) - ((u_int)strlen(tim) / 2);
 			y = screen_size_y(s) / 2;
 			screen_write_cursormove(&ctx, x, y, 0);
 
@@ -250,7 +250,7 @@ window_clock_draw_screen(struct window_mode_entry *wme)
 		return;
 	}
 
-	x = (screen_size_x(s) / 2) - 3 * strlen(tim);
+	x = (screen_size_x(s) / 2) - 3 * (u_int)strlen(tim);
 	y = (screen_size_y(s) / 2) - 3;
 
 	memcpy(&gc, &grid_default_cell, sizeof gc);

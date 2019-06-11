@@ -19,15 +19,49 @@
 #ifndef TMUX_H
 #define TMUX_H
 
+#include <sys/stat.h>
+#if !_MSC_VER
 #include <sys/time.h>
 #include <sys/uio.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/utsname.h>
+#include <sys/ioctl.h>
+#include <sys/un.h>
+
+#include <termios.h>
+#include <wchar.h>
+
+#include <fnmatch.h>
+#include <glob.h>
+
+#include <pwd.h>
+
+#include <stdarg.h>
+#include <string.h>
+#include <unistd.h>
+#include <ctype.h>
+#include <errno.h>
+#include <signal.h>
+#include <term.h>
+#include <curses.h>
+
+#include <libgen.h>
+#include <langinfo.h>
+
+#include <netinet/in.h>
+#include <resolv.h>
 
 #include <event.h>
+#endif
+#include <fcntl.h>
+#include <locale.h>
+#include <time.h>
 #include <limits.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include <termios.h>
-#include <wchar.h>
+#include <stdlib.h>
 
 #ifdef HAVE_UTEMPTER
 #include <utempter.h>

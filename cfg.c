@@ -290,7 +290,7 @@ load_cfg(const char *path, struct client *c, struct cmdq_item *item, int flags,
 		if (cond != NULL && !cond->met)
 			continue;
 
-		cmdlist = cmd_string_parse(p, path, line, &cause1);
+		cmdlist = cmd_string_parse(p, path, (u_int)line, &cause1);
 		if (cmdlist == NULL) {
 			free(buf);
 			if (cause1 == NULL)

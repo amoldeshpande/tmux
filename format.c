@@ -16,18 +16,6 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-#include <sys/wait.h>
-
-#include <ctype.h>
-#include <errno.h>
-#include <fnmatch.h>
-#include <libgen.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
 
 #include "tmux.h"
 
@@ -117,7 +105,7 @@ struct format_job {
 /* Format job tree. */
 static struct event format_job_event;
 static int format_job_cmp(struct format_job *, struct format_job *);
-static RB_HEAD(format_job_tree, format_job) format_jobs = RB_INITIALIZER();
+static RB_HEAD(format_job_tree, format_job) format_jobs = RB_INITIALIZER(void);
 RB_GENERATE_STATIC(format_job_tree, format_job, entry, format_job_cmp);
 
 /* Format job tree comparison function. */
@@ -1124,7 +1112,7 @@ format_add_modifier(struct format_modifier **list, u_int *count,
 
 	memcpy(fm->modifier, c, n);
 	fm->modifier[n] = '\0';
-	fm->size = n;
+	fm->size = (u_int)n;
 
 	fm->argv = argv;
 	fm->argc = argc;

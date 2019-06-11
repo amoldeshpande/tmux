@@ -16,14 +16,6 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-#include <sys/socket.h>
-
-#include <fcntl.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 
 #include "tmux.h"
 
@@ -70,6 +62,7 @@ job_run(const char *cmd, struct session *s, const char *cwd,
     job_update_cb updatecb, job_complete_cb completecb, job_free_cb freecb,
     void *data, int flags)
 {
+#if !_MSC_VER
 	struct job	*job;
 	struct environ	*env;
 	pid_t		 pid;
@@ -160,12 +153,16 @@ job_run(const char *cmd, struct session *s, const char *cwd,
 
 	log_debug("run job %p: %s, pid %ld", job, job->cmd, (long) job->pid);
 	return (job);
+#else
+	return NULL;
+#endif
 }
 
 /* Kill and free an individual job. */
 void
 job_free(struct job *job)
 {
+#if !_MSC_VER
 	log_debug("free job %p: %s", job, job->cmd);
 
 	LIST_REMOVE(job, entry);
@@ -182,6 +179,7 @@ job_free(struct job *job)
 		close(job->fd);
 
 	free(job);
+#endif
 }
 
 /* Job buffer read callback. */
@@ -254,7 +252,7 @@ job_check_died(pid_t pid, int status)
 			job->completecb(job);
 		job_free(job);
 	} else {
-		job->pid = -1;
+		job->pid = (pid_t)-1;
 		job->state = JOB_DEAD;
 	}
 }

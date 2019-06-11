@@ -16,15 +16,6 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-
-#include <errno.h>
-#include <pwd.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-
 #include "tmux.h"
 
 /*
@@ -41,7 +32,7 @@ static char	*cmd_string_expand_tilde(const char *, size_t *);
 static int
 cmd_string_getc(const char *s, size_t *p)
 {
-	const u_char	*ucs = s;
+	const char	*ucs = s;
 
 	if (ucs[*p] == '\0')
 		return (EOF);

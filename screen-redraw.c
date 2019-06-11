@@ -121,7 +121,7 @@ screen_redraw_check_cell(struct client *c, u_int px, u_int py, int pane_status,
 				line = wp->yoff - 1;
 			else
 				line = wp->yoff + wp->sy;
-			right = wp->xoff + 2 + wp->status_size - 1;
+			right = wp->xoff + 2 + (u_int)wp->status_size - 1;
 
 			if (py == line && px >= wp->xoff + 2 && px <= right)
 				return (CELL_INSIDE);
@@ -323,7 +323,7 @@ screen_redraw_draw_pane_status(struct screen_redraw_ctx *ctx)
 			continue;
 		s = &wp->status_screen;
 
-		size = wp->status_size;
+		size = (u_int)wp->status_size;
 		if (ctx->pane_status == CELL_STATUS_TOP)
 			yoff = wp->yoff - 1;
 		else

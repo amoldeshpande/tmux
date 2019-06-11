@@ -523,11 +523,11 @@ grid_set_cells(struct grid *gd, u_int px, u_int py, const struct grid_cell *gc,
 	if (grid_check_y(gd, __func__, py) != 0)
 		return;
 
-	grid_expand_line(gd, py, px + slen, 8);
+	grid_expand_line(gd, py, px + (u_int)slen, 8);
 
 	gl = &gd->linedata[py];
 	if (px + slen > gl->cellused)
-		gl->cellused = px + slen;
+		gl->cellused = px + (u_int)slen;
 
 	for (i = 0; i < slen; i++) {
 		gce = &gl->celldata[px + i];

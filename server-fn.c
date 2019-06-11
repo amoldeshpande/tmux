@@ -16,15 +16,6 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <sys/uio.h>
-
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
-
 #include "tmux.h"
 
 static struct session	*server_next_session(struct session *);

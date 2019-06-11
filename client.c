@@ -1,3 +1,4 @@
+#if 0
 /* $OpenBSD$ */
 
 /*
@@ -17,6 +18,7 @@
  */
 
 #include <sys/types.h>
+#if !_MSC_VER
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <sys/wait.h>
@@ -24,11 +26,12 @@
 
 #include <errno.h>
 #include <event.h>
-#include <fcntl.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#endif
+#include <fcntl.h>
 
 #include "tmux.h"
 
@@ -226,8 +229,10 @@ client_main(struct event_base *base, int argc, char **argv, int flags)
 	struct termios		 tio, saved_tio;
 	size_t			 size;
 
+#if !_MSC_VER
 	/* Ignore SIGCHLD now or daemon() in the server will leave a zombie. */
 	signal(SIGCHLD, SIG_IGN);
+#endif
 
 	/* Save the flags. */
 	client_flags = flags;
@@ -312,6 +317,7 @@ client_main(struct event_base *base, int argc, char **argv, int flags)
 			    strerror(errno));
 			return (1);
 		}
+#if !_MSC_VER
 		cfmakeraw(&tio);
 		tio.c_iflag = ICRNL|IXANY;
 		tio.c_oflag = OPOST|ONLCR;
@@ -325,6 +331,7 @@ client_main(struct event_base *base, int argc, char **argv, int flags)
 		cfsetospeed(&tio, cfgetospeed(&saved_tio));
 		tcsetattr(STDIN_FILENO, TCSANOW, &tio);
 	}
+#endif
 
 	/* Send identify messages. */
 	client_send_identify(ttynam, cwd);
@@ -721,3 +728,6 @@ client_dispatch_attached(struct imsg *imsg)
 		break;
 	}
 }
+#else
+static int ignore_4206;
+#endif 0

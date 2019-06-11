@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{CB506E6F-8752-4A11-BFA3-808C361F5F6C}</ProjectGuid>
+    <RootNamespace>tmux</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);ssize_t=SSIZE_T;_CRT_SECURE_NO_WARNINGS; _CRT_NONSTDC_NO_DEPRECATE;</PreprocessorDefinitions>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(ProjectDir)..\compat;$(ProjectDir)..\compat\msvc;$(ProjectDir)..</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>kernel32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);ssize_t=SSIZE_T;_CRT_SECURE_NO_WARNINGS; _CRT_NONSTDC_NO_DEPRECATE;</PreprocessorDefinitions>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(ProjectDir)..\compat;$(ProjectDir)..\compat\msvc;$(ProjectDir)..</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>kernel32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);ssize_t=SSIZE_T;_CRT_SECURE_NO_WARNINGS; _CRT_NONSTDC_NO_DEPRECATE;</PreprocessorDefinitions>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(ProjectDir)..\compat;$(ProjectDir)..\compat\msvc;$(ProjectDir)..</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>kernel32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);ssize_t=SSIZE_T;_CRT_SECURE_NO_WARNINGS; _CRT_NONSTDC_NO_DEPRECATE;</PreprocessorDefinitions>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(ProjectDir)..\compat;$(ProjectDir)..\compat\msvc;$(ProjectDir)..</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>kernel32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\alerts.c" />
+    <ClCompile Include="..\arguments.c" />
+    <ClCompile Include="..\attributes.c" />
+    <ClCompile Include="..\cfg.c" />
+    <ClCompile Include="..\client.c" />
+    <ClCompile Include="..\cmd-attach-session.c" />
+    <ClCompile Include="..\cmd-bind-key.c" />
+    <ClCompile Include="..\cmd-break-pane.c" />
+    <ClCompile Include="..\cmd-capture-pane.c" />
+    <ClCompile Include="..\cmd-choose-tree.c" />
+    <ClCompile Include="..\cmd-command-prompt.c" />
+    <ClCompile Include="..\cmd-confirm-before.c" />
+    <ClCompile Include="..\cmd-copy-mode.c" />
+    <ClCompile Include="..\cmd-detach-client.c" />
+    <ClCompile Include="..\cmd-display-menu.c" />
+    <ClCompile Include="..\cmd-display-message.c" />
+    <ClCompile Include="..\cmd-display-panes.c" />
+    <ClCompile Include="..\cmd-find-window.c" />
+    <ClCompile Include="..\cmd-find.c" />
+    <ClCompile Include="..\cmd-if-shell.c" />
+    <ClCompile Include="..\cmd-join-pane.c" />
+    <ClCompile Include="..\cmd-kill-pane.c" />
+    <ClCompile Include="..\cmd-kill-server.c" />
+    <ClCompile Include="..\cmd-kill-session.c" />
+    <ClCompile Include="..\cmd-kill-window.c" />
+    <ClCompile Include="..\cmd-list-buffers.c" />
+    <ClCompile Include="..\cmd-list-clients.c" />
+    <ClCompile Include="..\cmd-list-keys.c" />
+    <ClCompile Include="..\cmd-list-panes.c" />
+    <ClCompile Include="..\cmd-list-sessions.c" />
+    <ClCompile Include="..\cmd-list-windows.c" />
+    <ClCompile Include="..\cmd-list.c" />
+    <ClCompile Include="..\cmd-load-buffer.c" />
+    <ClCompile Include="..\cmd-lock-server.c" />
+    <ClCompile Include="..\cmd-move-window.c" />
+    <ClCompile Include="..\cmd-new-session.c" />
+    <ClCompile Include="..\cmd-new-window.c" />
+    <ClCompile Include="..\cmd-paste-buffer.c" />
+    <ClCompile Include="..\cmd-pipe-pane.c" />
+    <ClCompile Include="..\cmd-queue.c" />
+    <ClCompile Include="..\cmd-refresh-client.c" />
+    <ClCompile Include="..\cmd-rename-session.c" />
+    <ClCompile Include="..\cmd-rename-window.c" />
+    <ClCompile Include="..\cmd-resize-pane.c" />
+    <ClCompile Include="..\cmd-resize-window.c" />
+    <ClCompile Include="..\cmd-respawn-pane.c" />
+    <ClCompile Include="..\cmd-respawn-window.c" />
+    <ClCompile Include="..\cmd-rotate-window.c" />
+    <ClCompile Include="..\cmd-run-shell.c" />
+    <ClCompile Include="..\cmd-save-buffer.c" />
+    <ClCompile Include="..\cmd-select-layout.c" />
+    <ClCompile Include="..\cmd-select-pane.c" />
+    <ClCompile Include="..\cmd-select-window.c" />
+    <ClCompile Include="..\cmd-send-keys.c" />
+    <ClCompile Include="..\cmd-set-buffer.c" />
+    <ClCompile Include="..\cmd-set-environment.c" />
+    <ClCompile Include="..\cmd-set-option.c" />
+    <ClCompile Include="..\cmd-show-environment.c" />
+    <ClCompile Include="..\cmd-show-messages.c" />
+    <ClCompile Include="..\cmd-show-options.c" />
+    <ClCompile Include="..\cmd-source-file.c" />
+    <ClCompile Include="..\cmd-split-window.c" />
+    <ClCompile Include="..\cmd-string.c" />
+    <ClCompile Include="..\cmd-swap-pane.c" />
+    <ClCompile Include="..\cmd-swap-window.c" />
+    <ClCompile Include="..\cmd-switch-client.c" />
+    <ClCompile Include="..\cmd-unbind-key.c" />
+    <ClCompile Include="..\cmd-wait-for.c" />
+    <ClCompile Include="..\cmd.c" />
+    <ClCompile Include="..\colour.c" />
+    <ClCompile Include="..\compat\base64.c" />
+    <ClCompile Include="..\compat\getopt.c" />
+    <ClCompile Include="..\compat\getprogname.c" />
+    <ClCompile Include="..\compat\imsg-buffer.c" />
+    <ClCompile Include="..\compat\imsg.c" />
+    <ClCompile Include="..\compat\strcasestr.c" />
+    <ClCompile Include="..\compat\strlcat.c" />
+    <ClCompile Include="..\compat\strlcpy.c" />
+    <ClCompile Include="..\compat\strndup.c" />
+    <ClCompile Include="..\compat\strsep.c" />
+    <ClCompile Include="..\compat\strtonum.c" />
+    <ClCompile Include="..\compat\vis.c" />
+    <ClCompile Include="..\control-notify.c" />
+    <ClCompile Include="..\control.c" />
+    <ClCompile Include="..\format-draw.c" />
+    <ClCompile Include="..\format.c" />
+    <ClCompile Include="..\grid-view.c" />
+    <ClCompile Include="..\grid.c" />
+    <ClCompile Include="..\input-keys.c" />
+    <ClCompile Include="..\input.c" />
+    <ClCompile Include="..\job.c" />
+    <ClCompile Include="..\key-bindings.c" />
+    <ClCompile Include="..\key-string.c" />
+    <ClCompile Include="..\layout-custom.c" />
+    <ClCompile Include="..\layout-set.c" />
+    <ClCompile Include="..\layout.c" />
+    <ClCompile Include="..\log.c" />
+    <ClCompile Include="..\menu.c" />
+    <ClCompile Include="..\mode-tree.c" />
+    <ClCompile Include="..\names.c" />
+    <ClCompile Include="..\notify.c" />
+    <ClCompile Include="..\options-table.c" />
+    <ClCompile Include="..\options.c" />
+    <ClCompile Include="..\osdep-windows.c" />
+    <ClCompile Include="..\paste.c" />
+    <ClCompile Include="..\proc.c" />
+    <ClCompile Include="..\resize.c" />
+    <ClCompile Include="..\screen-redraw.c" />
+    <ClCompile Include="..\screen-write.c" />
+    <ClCompile Include="..\screen.c" />
+    <ClCompile Include="..\server-client.c" />
+    <ClCompile Include="..\server-fn.c" />
+    <ClCompile Include="..\server.c" />
+    <ClCompile Include="..\session.c" />
+    <ClCompile Include="..\spawn.c" />
+    <ClCompile Include="..\status.c" />
+    <ClCompile Include="..\style.c" />
+    <ClCompile Include="..\tmux.c" />
+    <ClCompile Include="..\tty-acs.c" />
+    <ClCompile Include="..\tty-keys.c" />
+    <ClCompile Include="..\tty-term.c" />
+    <ClCompile Include="..\tty.c" />
+    <ClCompile Include="..\utf8.c" />
+    <ClCompile Include="..\window-buffer.c" />
+    <ClCompile Include="..\window-client.c" />
+    <ClCompile Include="..\window-clock.c" />
+    <ClCompile Include="..\window-copy.c" />
+    <ClCompile Include="..\window-tree.c" />
+    <ClCompile Include="..\window.c" />
+    <ClCompile Include="..\xmalloc.c" />
+    <ClCompile Include="..\xterm-keys.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\compat.h" />
+    <ClInclude Include="..\compat\bitstring.h" />
+    <ClInclude Include="..\compat\imsg.h" />
+    <ClInclude Include="..\compat\msvc\vc_compat.h" />
+    <ClInclude Include="..\compat\queue.h" />
+    <ClInclude Include="..\compat\tree.h" />
+    <ClInclude Include="..\compat\vis.h" />
+    <ClInclude Include="..\tmux.h" />
+    <ClInclude Include="..\xmalloc.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\example_tmux.conf" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

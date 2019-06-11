@@ -18,7 +18,9 @@
  */
 
 #include <sys/types.h>
+#if !_MSC_VER
 #include <sys/wait.h>
+#endif
 
 #include <stdlib.h>
 #include <string.h>

@@ -18,11 +18,12 @@
 
 #include <sys/types.h>
 
+#if !_MSC_VER
 #include <fnmatch.h>
+#endif
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
 #include "tmux.h"
 

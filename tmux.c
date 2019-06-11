@@ -16,20 +16,6 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-#include <sys/stat.h>
-
-#include <errno.h>
-#include <event.h>
-#include <fcntl.h>
-#include <langinfo.h>
-#include <locale.h>
-#include <pwd.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
-
 #include "tmux.h"
 
 struct options	*global_options;	/* server options */
@@ -136,10 +122,12 @@ make_label(const char *label, char **cause)
 		errno = ENOTDIR;
 		goto fail;
 	}
+#if !_MSC_VER
 	if (sb.st_uid != uid || (sb.st_mode & S_IRWXO) != 0) {
 		errno = EACCES;
 		goto fail;
 	}
+#endif
 	xasprintf(&path, "%s/%s", resolved, label);
 	return (path);
 
@@ -151,6 +139,7 @@ fail:
 void
 setblocking(int fd, int state)
 {
+#if !_MSC_VER
 	int mode;
 
 	if ((mode = fcntl(fd, F_GETFL)) != -1) {
@@ -160,6 +149,7 @@ setblocking(int fd, int state)
 			mode &= ~O_NONBLOCK;
 		fcntl(fd, F_SETFL, mode);
 	}
+#endif
 }
 
 const char *
@@ -220,9 +210,11 @@ main(int argc, char **argv)
 	    setlocale(LC_CTYPE, "C.UTF-8") == NULL) {
 		if (setlocale(LC_CTYPE, "") == NULL)
 			errx(1, "invalid LC_ALL, LC_CTYPE or LANG");
+#if !_MSC_VER
 		s = nl_langinfo(CODESET);
 		if (strcasecmp(s, "UTF-8") != 0 && strcasecmp(s, "UTF8") != 0)
 			errx(1, "need UTF-8 locale (LC_CTYPE) but have %s", s);
+#endif
 	}
 
 	setlocale(LC_TIME, "");

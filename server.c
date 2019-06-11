@@ -16,23 +16,6 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-#include <sys/ioctl.h>
-#include <sys/socket.h>
-#include <sys/stat.h>
-#include <sys/un.h>
-#include <sys/wait.h>
-
-#include <errno.h>
-#include <event.h>
-#include <fcntl.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <termios.h>
-#include <time.h>
-#include <unistd.h>
 
 #include "tmux.h"
 
@@ -116,6 +99,7 @@ server_create_socket(char **cause)
 	if ((fd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1)
 		goto fail;
 
+#if !_MSC_VER
 	mask = umask(S_IXUSR|S_IXGRP|S_IRWXO);
 	if (bind(fd, (struct sockaddr *)&sa, sizeof sa) == -1) {
 		saved_errno = errno;
@@ -124,6 +108,7 @@ server_create_socket(char **cause)
 		goto fail;
 	}
 	umask(mask);
+#endif
 
 	if (listen(fd, 128) == -1) {
 		saved_errno = errno;
@@ -148,6 +133,7 @@ int
 server_start(struct tmuxproc *client, struct event_base *base, int lockfd,
     char *lockfile)
 {
+#if !_MSC_VER
 	int		 pair[2];
 	sigset_t	 set, oldset;
 	struct client	*c;
@@ -212,6 +198,7 @@ server_start(struct tmuxproc *client, struct event_base *base, int lockfd,
 	start_cfg();
 	server_add_accept(0);
 
+#endif
 	proc_loop(server_proc, server_loop);
 
 	job_kill_all();
@@ -308,6 +295,7 @@ server_update_socket(void)
 	if (n != last) {
 		last = n;
 
+#if !_MSC_VER
 		if (stat(socket_path, &sb) != 0)
 			return;
 		mode = sb.st_mode & ACCESSPERMS;
@@ -321,6 +309,7 @@ server_update_socket(void)
 		} else
 			mode &= ~(S_IXUSR|S_IXGRP|S_IXOTH);
 		chmod(socket_path, mode);
+#endif
 	}
 }
 
@@ -381,6 +370,7 @@ server_add_accept(int timeout)
 static void
 server_signal(int sig)
 {
+#if !_MSC_VER
 	int	fd;
 
 	log_debug("%s: %s", __func__, strsignal(sig));
@@ -406,12 +396,14 @@ server_signal(int sig)
 		proc_toggle_log(server_proc);
 		break;
 	}
+#endif
 }
 
 /* Handle SIGCHLD. */
 static void
 server_child_signal(void)
 {
+#if !_MSC_VER
 	int	 status;
 	pid_t	 pid;
 
@@ -429,6 +421,7 @@ server_child_signal(void)
 		else if (WIFEXITED(status) || WIFSIGNALED(status))
 			server_child_exited(pid, status);
 	}
+#endif
 }
 
 /* Handle exited children. */
@@ -460,6 +453,7 @@ server_child_exited(pid_t pid, int status)
 static void
 server_child_stopped(pid_t pid, int status)
 {
+#if !_MSC_VER
 	struct window		*w;
 	struct window_pane	*wp;
 
@@ -474,4 +468,5 @@ server_child_stopped(pid_t pid, int status)
 			}
 		}
 	}
+#endif
 }

@@ -42,14 +42,18 @@
  * IF IBM IS APPRISED OF THE POSSIBILITY OF SUCH DAMAGES.
  */
 
+#if !_MSC_VER
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <arpa/nameser.h>
+#include <resolv.h>
+#else
+#include <vc_compat.h>
+#endif
 
 #include <ctype.h>
-#include <resolv.h>
 #include <stdio.h>
 
 #include <stdlib.h>
@@ -177,7 +181,7 @@ b64_ntop(src, srclength, target, targsize)
 	if (datalength >= targsize)
 		return (-1);
 	target[datalength] = '\0';	/* Returned value doesn't count \0. */
-	return (datalength);
+	return (int)(datalength);
 }
 
 /* skips all whitespace anywhere.

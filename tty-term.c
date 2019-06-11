@@ -23,10 +23,6 @@
 #elif defined(HAVE_NCURSES_H)
 #include <ncurses.h>
 #endif
-#include <fnmatch.h>
-#include <stdlib.h>
-#include <string.h>
-#include <term.h>
 
 #include "tmux.h"
 
@@ -504,10 +500,12 @@ tty_term_find(char *name, int fd, char **cause)
 		a = options_array_next(a);
 	}
 
+#if !_MSC_VER
 	/* Delete curses data. */
 #if !defined(NCURSES_VERSION_MAJOR) || NCURSES_VERSION_MAJOR > 5 || \
     (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR > 6)
 	del_curterm(cur_term);
+#endif
 #endif
 
 	/* These are always required. */
@@ -648,14 +646,14 @@ tty_term_string3(struct tty_term *term, enum tty_code_code code, int a, int b, i
 const char *
 tty_term_ptr1(struct tty_term *term, enum tty_code_code code, const void *a)
 {
-	return (tparm((char *) tty_term_string(term, code), (long)a, 0, 0, 0, 0, 0, 0, 0, 0));
+	return (tparm((char *) tty_term_string(term, code), (ptrdiff_t)a, 0, 0, 0, 0, 0, 0, 0, 0));
 }
 
 const char *
 tty_term_ptr2(struct tty_term *term, enum tty_code_code code, const void *a,
     const void *b)
 {
-	return (tparm((char *) tty_term_string(term, code), (long)a, (long)b, 0, 0, 0, 0, 0, 0, 0));
+	return (tparm((char *) tty_term_string(term, code), (ptrdiff_t)a, (ptrdiff_t)b, 0, 0, 0, 0, 0, 0, 0));
 }
 
 int

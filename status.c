@@ -16,16 +16,6 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-#include <sys/time.h>
-
-#include <errno.h>
-#include <limits.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
 
 #include "tmux.h"
 
@@ -642,7 +632,7 @@ status_prompt_redraw(struct client *c)
 	memcpy(&cursorgc, &gc, sizeof cursorgc);
 	cursorgc.attr ^= GRID_ATTR_REVERSE;
 
-	start = screen_write_strlen("%s", c->prompt_string);
+	start = (u_int)screen_write_strlen("%s", c->prompt_string);
 	if (start > c->tty.sx)
 		start = c->tty.sx;
 

@@ -16,19 +16,6 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-#include <sys/ioctl.h>
-
-#include <netinet/in.h>
-
-#include <curses.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <resolv.h>
-#include <stdlib.h>
-#include <string.h>
-#include <termios.h>
-#include <unistd.h>
 
 #include "tmux.h"
 
@@ -88,8 +75,10 @@ tty_create_log(void)
 	xsnprintf(name, sizeof name, "tmux-out-%ld.log", (long)getpid());
 
 	tty_log_fd = open(name, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+#if !_MSC_VER
 	if (tty_log_fd != -1 && fcntl(tty_log_fd, F_SETFD, FD_CLOEXEC) == -1)
 		fatal("fcntl failed");
+#endif
 }
 
 int
@@ -284,6 +273,7 @@ tty_start_tty(struct tty *tty)
 		event_add(&tty->event_in, NULL);
 
 		memcpy(&tio, &tty->tio, sizeof tio);
+#if !_MSC_VER
 		tio.c_iflag &= ~(IXON|IXOFF|ICRNL|INLCR|IGNCR|IMAXBEL|ISTRIP);
 		tio.c_iflag |= IGNBRK;
 		tio.c_oflag &= ~(OPOST|ONLCR|OCRNL|ONLRET);
@@ -293,6 +283,7 @@ tty_start_tty(struct tty *tty)
 		tio.c_cc[VTIME] = 0;
 		if (tcsetattr(tty->fd, TCSANOW, &tio) == 0)
 			tcflush(tty->fd, TCIOFLUSH);
+#endif
 	}
 
 	tty_putcode(tty, TTYC_SMCUP);
@@ -510,7 +501,7 @@ tty_add(struct tty *tty, const char *buf, size_t len)
 	c->written += len;
 
 	if (tty_log_fd != -1)
-		write(tty_log_fd, buf, len);
+		write(tty_log_fd, buf, (u_int)len);
 	if (tty->flags & TTY_STARTED)
 		event_add(&tty->event_out, NULL);
 }

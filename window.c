@@ -16,18 +16,6 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-#include <sys/ioctl.h>
-
-#include <errno.h>
-#include <fcntl.h>
-#include <fnmatch.h>
-#include <signal.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
 
 #include "tmux.h"
 
@@ -1260,7 +1248,7 @@ window_pane_find_up(struct window_pane *wp)
 	size = 0;
 
 	edge = wp->yoff;
-	if (edge == (status == 1 ? 1 : 0))
+	if (edge == ((unsigned)status == 1U ? 1U : 0))
 		edge = wp->window->sy + 1 - (status == 2 ? 1 : 0);
 
 	left = wp->xoff;

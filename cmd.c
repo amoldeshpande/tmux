@@ -17,13 +17,15 @@
  */
 
 #include <sys/types.h>
+#if !_MSC_VER
 #include <sys/time.h>
 
 #include <fnmatch.h>
 #include <pwd.h>
+#include <unistd.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
 #include "tmux.h"
 

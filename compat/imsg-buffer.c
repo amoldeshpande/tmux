@@ -16,16 +16,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/uio.h>
-
-#include <limits.h>
-#include <errno.h>
 #include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
 #include "compat.h"
 #include "imsg.h"
 
@@ -224,6 +215,7 @@ msgbuf_clear(struct msgbuf *msgbuf)
 int
 msgbuf_write(struct msgbuf *msgbuf)
 {
+#if !_MSC_VER
 	struct iovec	 iov[IOV_MAX];
 	struct ibuf	*buf;
 	unsigned int	 i = 0;
@@ -285,8 +277,10 @@ again:
 	}
 
 	msgbuf_drain(msgbuf, n);
-
 	return (1);
+#else
+	return -1;
+#endif
 }
 
 static void

@@ -16,16 +16,6 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-#include <sys/socket.h>
-
-#include <errno.h>
-#include <fcntl.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
 
 #include "tmux.h"
 
@@ -55,6 +45,7 @@ const struct cmd_entry cmd_pipe_pane_entry = {
 static enum cmd_retval
 cmd_pipe_pane_exec(struct cmd *self, struct cmdq_item *item)
 {
+#if !_MSC_VER
 	struct args		*args = self->args;
 	struct client		*c = cmd_find_client(item, NULL, 1);
 	struct window_pane	*wp = item->target.wp;
@@ -178,6 +169,9 @@ cmd_pipe_pane_exec(struct cmd *self, struct cmdq_item *item)
 		free(cmd);
 		return (CMD_RETURN_NORMAL);
 	}
+#else
+	return CMD_RETURN_ERROR;
+#endif
 }
 
 static void

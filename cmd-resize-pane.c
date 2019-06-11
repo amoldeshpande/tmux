@@ -57,7 +57,7 @@ cmd_resize_pane_exec(struct cmd *self, struct cmdq_item *item)
 	struct session		*s = item->target.s;
 	const char	       	*errstr;
 	char			*cause;
-	u_int			 adjust;
+	int			 adjust;
 	int			 x, y;
 
 	if (args_has(args, 'M')) {
