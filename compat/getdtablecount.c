@@ -16,8 +16,10 @@
 
 #include <sys/types.h>
 
+#if !_MSC_VER
 #include <glob.h>
 #include <unistd.h>
+#endif
 
 #include "compat.h"
 

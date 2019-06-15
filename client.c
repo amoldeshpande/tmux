@@ -1,4 +1,3 @@
-#if 0
 /* $OpenBSD$ */
 
 /*
@@ -16,23 +15,6 @@
  * IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-
-#include <sys/types.h>
-#if !_MSC_VER
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <sys/wait.h>
-#include <sys/file.h>
-
-#include <errno.h>
-#include <event.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#endif
-#include <fcntl.h>
-
 #include "tmux.h"
 
 static struct tmuxproc	*client_proc;
@@ -57,8 +39,10 @@ static const char	*client_execcmd;
 static int		 client_attached;
 
 static __dead void	 client_exec(const char *,const char *);
+#if !_MSC_VER
 static int		 client_get_lock(char *);
-static int		 client_connect(struct event_base *, const char *, int);
+#endif
+static fd_t	 client_connect(struct event_base *, const char *, int);
 static void		 client_send_identify(const char *, const char *);
 static void		 client_stdin_callback(int, short, void *);
 static void		 client_write(int, const char *, size_t);
@@ -68,6 +52,7 @@ static void		 client_dispatch_attached(struct imsg *);
 static void		 client_dispatch_wait(struct imsg *);
 static const char	*client_exit_message(void);
 
+#if !_MSC_VER
 /*
  * Get server create lock. If already held then server start is happening in
  * another client, so block until the lock is released and return -2 to
@@ -105,7 +90,8 @@ client_connect(struct event_base *base, const char *path, int start_server)
 {
 	struct sockaddr_un	sa;
 	size_t			size;
-	int			fd, lockfd = -1, locked = 0;
+	SOCKET			fd;
+	int lockfd = -1, locked = 0;
 	char		       *lockfile = NULL;
 
 	memset(&sa, 0, sizeof sa);
@@ -123,12 +109,12 @@ retry:
 
 	log_debug("trying connect");
 	if (connect(fd, (struct sockaddr *)&sa, sizeof sa) == -1) {
-		log_debug("connect failed: %s", strerror(errno));
-		if (errno != ECONNREFUSED && errno != ENOENT)
+		log_debug("connect failed: %s", strerror(sockerrno));
+		if (sockerrno != ECONNREFUSED && sockerrno != ENOENT)
 			goto failed;
 		if (!start_server)
 			goto failed;
-		close(fd);
+		close_socket(fd);
 
 		if (!locked) {
 			xasprintf(&lockfile, "%s.lock", path);
@@ -153,7 +139,7 @@ retry:
 			goto retry;
 		}
 
-		if (lockfd >= 0 && unlink(path) != 0 && errno != ENOENT) {
+		if (lockfd >= 0 && unlink_socket(path) != 0 && errno != ENOENT) {
 			free(lockfile);
 			close(lockfd);
 			return (-1);
@@ -173,9 +159,10 @@ failed:
 		free(lockfile);
 		close(lockfd);
 	}
-	close(fd);
+	closesocket(fd);
 	return (-1);
 }
+#endif
 
 /* Get exit string from reason number. */
 const char *
@@ -221,7 +208,8 @@ client_main(struct event_base *base, int argc, char **argv, int flags)
 	struct cmd		*cmd;
 	struct cmd_list		*cmdlist;
 	struct msg_command_data	*data;
-	int			 cmdflags, fd, i;
+	int			 cmdflags,  i;
+	fd_t fd;
 	const char		*ttynam, *cwd;
 	pid_t			 ppid;
 	enum msgtype		 msg;
@@ -229,10 +217,8 @@ client_main(struct event_base *base, int argc, char **argv, int flags)
 	struct termios		 tio, saved_tio;
 	size_t			 size;
 
-#if !_MSC_VER
 	/* Ignore SIGCHLD now or daemon() in the server will leave a zombie. */
 	signal(SIGCHLD, SIG_IGN);
-#endif
 
 	/* Save the flags. */
 	client_flags = flags;
@@ -262,6 +248,13 @@ client_main(struct event_base *base, int argc, char **argv, int flags)
 			cmd_list_free(cmdlist);
 		}
 	}
+#if _MSC_VER
+	if (flags & CLIENT_START_WINDOWS_SERVER)
+	{
+		run_windows_server(client_proc,base);
+		exit(0);
+	}
+#endif
 
 	/* Create client process structure (starts logging). */
 	client_proc = proc_start("client");
@@ -269,7 +262,7 @@ client_main(struct event_base *base, int argc, char **argv, int flags)
 
 	/* Initialize the client socket and start the server. */
 	fd = client_connect(base, socket_path, cmdflags & CMD_STARTSERVER);
-	if (fd == -1) {
+	if (fd == INVALID_FD) {
 		if (errno == ECONNREFUSED) {
 			fprintf(stderr, "no server running on %s\n",
 			    socket_path);
@@ -300,7 +293,7 @@ client_main(struct event_base *base, int argc, char **argv, int flags)
 		fatal("pledge failed");
 
 	/* Free stuff that is not used in the client. */
-	if (ptm_fd != -1)
+	if (ptm_fd != INVALID_FD)
 		close(ptm_fd);
 	options_free(global_options);
 	options_free(global_s_options);
@@ -317,7 +310,6 @@ client_main(struct event_base *base, int argc, char **argv, int flags)
 			    strerror(errno));
 			return (1);
 		}
-#if !_MSC_VER
 		cfmakeraw(&tio);
 		tio.c_iflag = ICRNL|IXANY;
 		tio.c_oflag = OPOST|ONLCR;
@@ -331,7 +323,6 @@ client_main(struct event_base *base, int argc, char **argv, int flags)
 		cfsetospeed(&tio, cfgetospeed(&saved_tio));
 		tcsetattr(STDIN_FILENO, TCSANOW, &tio);
 	}
-#endif
 
 	/* Send identify messages. */
 	client_send_identify(ttynam, cwd);
@@ -418,7 +409,7 @@ client_send_identify(const char *ttynam, const char *cwd)
 	    strlen(ttynam) + 1);
 	proc_send(client_peer, MSG_IDENTIFY_CWD, -1, cwd, strlen(cwd) + 1);
 
-	if ((fd = dup(STDIN_FILENO)) == -1)
+	if ((fd = dup(STDIN_FILENO)) == INVALID_FD)
 		fatal("dup failed");
 	proc_send(client_peer, MSG_IDENTIFY_STDIN, fd, NULL, 0);
 
@@ -505,6 +496,7 @@ client_exec(const char *shell, const char *shellcmd)
 static void
 client_signal(int sig)
 {
+#if !_MSC_VER
 	struct sigaction sigact;
 	int		 status;
 
@@ -539,6 +531,7 @@ client_signal(int sig)
 			break;
 		}
 	}
+#endif
 }
 
 /* Callback for client read events. */
@@ -655,6 +648,7 @@ client_dispatch_wait(struct imsg *imsg)
 static void
 client_dispatch_attached(struct imsg *imsg)
 {
+#if !_MSC_VER
 	struct sigaction	 sigact;
 	char			*data;
 	ssize_t			 datalen;
@@ -727,7 +721,8 @@ client_dispatch_attached(struct imsg *imsg)
 		proc_send(client_peer, MSG_UNLOCK, -1, NULL, 0);
 		break;
 	}
+#endif
 }
-#else
-static int ignore_4206;
-#endif 0
+#if _MSC_VER
+#include <msvc/win_client.c>
+#endif

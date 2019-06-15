@@ -161,7 +161,7 @@ server_client_is_default_key_table(struct client *c, struct key_table *table)
 
 /* Create a new client. */
 struct client *
-server_client_create(int fd)
+server_client_create(fd_t fd)
 {
 	struct client	*c;
 

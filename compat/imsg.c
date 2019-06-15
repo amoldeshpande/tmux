@@ -16,13 +16,6 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#if !_MSC_VER
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/uio.h>
-
-#include <unistd.h>
-#endif
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -48,7 +41,6 @@ imsg_init(struct imsgbuf *ibuf, int fd)
 ssize_t
 imsg_read(struct imsgbuf *ibuf)
 {
-#if !_MSC_VER
 	struct msghdr		 msg;
 	struct cmsghdr		*cmsg;
 	union {
@@ -121,9 +113,6 @@ again:
 fail:
 	free(ifd);
 	return (n);
-#else
-	return -1;
-#endif
 }
 
 ssize_t

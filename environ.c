@@ -189,6 +189,7 @@ environ_update(struct options *oo, struct environ *src, struct environ *dst)
 }
 
 /* Push environment into the real environment - use after fork(). */
+#if !_MSC_VER
 void
 environ_push(struct environ *env)
 {
@@ -200,6 +201,56 @@ environ_push(struct environ *env)
 			setenv(envent->name, envent->value, 1);
 	}
 }
+#else
+char* win_convert_env(void* paramPtr)
+{
+	struct environ_entry	*envent;
+	char* ptr = xcalloc(1,32700); // almost max
+	int len = 0;
+	int max = 32700;
+	char* currPtr = ptr;
+	struct environ* env = paramPtr;
+
+	RB_FOREACH(envent, environ, env) {
+		if (envent->value != NULL && *envent->name != '\0')
+		{
+			char* pvar = envent->name;
+			while (*pvar)
+			{
+				if (len + 2 == max) // if this + terminating '=' exceed limit
+				{
+					goto Error;
+				}
+				*currPtr++ = *pvar;
+			}
+			*currPtr++ = '=';
+			pvar = envent->value;
+			while (*pvar)
+			{
+				if (len + 3 == max) // if this + terminating NULLs exceed limit
+				{
+					goto Error;
+				}
+				*currPtr++ = *pvar;
+			}
+			*currPtr++ = 0;
+		}
+	}
+	*currPtr = 0;
+	return ptr;
+Error:
+	if (ptr)
+	{
+		free(ptr);
+	}
+	return NULL;
+}
+void win_free_env(char* ptr)
+{
+	free(ptr);
+}
+
+#endif
 
 /* Log the environment. */
 void

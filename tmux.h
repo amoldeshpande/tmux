@@ -24,6 +24,7 @@
 #include <sys/time.h>
 #include <sys/uio.h>
 #include <sys/wait.h>
+#include <sys/file.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/utsname.h>
@@ -43,7 +44,6 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <errno.h>
-#include <signal.h>
 #include <term.h>
 #include <curses.h>
 
@@ -52,9 +52,9 @@
 
 #include <netinet/in.h>
 #include <resolv.h>
-
-#include <event.h>
 #endif
+#include <signal.h>
+#include <event.h>
 #include <fcntl.h>
 #include <locale.h>
 #include <time.h>
@@ -1521,6 +1521,7 @@ struct client {
 	(CLIENT_DEAD|		\
 	 CLIENT_SUSPENDED|	\
 	 CLIENT_DETACHING)
+#define CLIENT_START_WINDOWS_SERVER 0x4000000
 	int		 flags;
 	struct key_table *keytable;
 
@@ -1683,10 +1684,10 @@ extern struct environ	*global_environ;
 extern struct timeval	 start_time;
 extern const char	*socket_path;
 extern const char	*shell_command;
-extern int		 ptm_fd;
+extern fd_t		 ptm_fd;
 extern const char	*shell_command;
 int		 areshell(const char *);
-void		 setblocking(int, int);
+void		 setblocking(fd_t, int);
 const char	*find_cwd(void);
 const char	*find_home(void);
 
@@ -1698,7 +1699,7 @@ void	proc_loop(struct tmuxproc *, int (*)(void));
 void	proc_exit(struct tmuxproc *);
 void	proc_set_signals(struct tmuxproc *, void(*)(int));
 void	proc_clear_signals(struct tmuxproc *, int);
-struct tmuxpeer *proc_add_peer(struct tmuxproc *, int,
+struct tmuxpeer *proc_add_peer(struct tmuxproc *, fd_t,
 	    void (*)(struct imsg *, void *), void *);
 void	proc_remove_peer(struct tmuxpeer *);
 void	proc_kill_peer(struct tmuxpeer *);

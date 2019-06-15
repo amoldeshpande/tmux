@@ -24,6 +24,12 @@
 
 #include <termios.h>
 #include <wchar.h>
+typedef int fd_t;
+#define INVALID_FD (fd_t)-1
+#define sockerrno errno
+#define close_socket close
+#define unlink_socket unlink
+#define dprintf(f,...)
 #else
 #include <vc_compat.h>
 #endif // MSC_VER
@@ -65,13 +71,21 @@ void	warn(const char *, ...);
 void	warnx(const char *, ...);
 #endif
 
-#ifndef HAVE_PATHS_H
+#if !_MSC_VER
+#ifndef HAVE_PATHS_H 
 #define	_PATH_BSHELL	"/bin/sh"
 #define	_PATH_TMP	"/tmp/"
 #define _PATH_DEVNULL	"/dev/null"
 #define _PATH_TTY	"/dev/tty"
 #define _PATH_DEV	"/dev/"
 #define _PATH_DEFPATH	"/usr/bin:/bin"
+#endif
+#else
+#define	_PATH_BSHELL	"c:\\windows\\system32\\cmd.exe"
+#define _PATH_DEVNULL	"NUL"
+#define _PATH_TTY	"/dev/tty"
+#define _PATH_DEV	"/dev/"
+#define _PATH_DEFPATH	"C:\\windows\\system32;c:\\windows\\syswow64"
 #endif
 
 #ifndef __OpenBSD__
@@ -296,7 +310,7 @@ int		 b64_pton(const char *, u_char *, size_t);
 
 #ifndef HAVE_FDFORKPTY
 /* fdforkpty.c */
-int		 getptmfd(void);
+fd_t		 getptmfd(void);
 pid_t		 fdforkpty(int, int *, char *, struct termios *,
 		     struct winsize *);
 #endif

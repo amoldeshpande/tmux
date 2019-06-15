@@ -15,14 +15,6 @@
  * IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-
-#include <sys/types.h>
-
-#if !_MSC_VER
-#include <event.h>
-#endif
-#include <stdlib.h>
-
 #include "tmux.h"
 
 static int	alerts_fired;

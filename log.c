@@ -28,6 +28,15 @@ static void	 log_vwrite(const char *, va_list);
 static void
 log_event_cb(__unused int severity, const char *msg)
 {
+	const char* s;
+	switch (severity) {
+	case _EVENT_LOG_DEBUG: s = "debug"; break;
+	case _EVENT_LOG_MSG:   s = "msg";   break;
+	case _EVENT_LOG_WARN:  s = "warn";  break;
+	case _EVENT_LOG_ERR:   s = "error"; break;
+	default:               s = "?";     break; /* never reached */
+	}
+	dprintf("(%d)[%s] %s\n",GetCurrentProcessId(), s, msg);
 	log_debug("%s", msg);
 }
 
@@ -61,7 +70,7 @@ log_open(const char *name)
 	if (log_file == NULL)
 		return;
 
-	setvbuf(log_file, NULL, _IOLBF, 0);
+	setvbuf(log_file, NULL, _IOLBF, 64);
 	event_set_log_callback(log_event_cb);
 }
 

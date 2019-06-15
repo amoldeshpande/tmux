@@ -32,13 +32,13 @@ struct ibuf {
 	size_t			 max;
 	size_t			 wpos;
 	size_t			 rpos;
-	int			 fd;
+	fd_t			 fd;
 };
 
 struct msgbuf {
 	TAILQ_HEAD(, ibuf)	 bufs;
 	uint32_t		 queued;
-	int			 fd;
+	fd_t			 fd;
 };
 
 struct ibuf_read {
@@ -56,7 +56,7 @@ struct imsgbuf {
 	TAILQ_HEAD(, imsg_fd)	 fds;
 	struct ibuf_read	 r;
 	struct msgbuf		 w;
-	int			 fd;
+	fd_t			 fd;
 	pid_t			 pid;
 };
 
@@ -94,7 +94,7 @@ int		 msgbuf_write(struct msgbuf *);
 void		 msgbuf_drain(struct msgbuf *, size_t);
 
 /* imsg.c */
-void	 imsg_init(struct imsgbuf *, int);
+void	 imsg_init(struct imsgbuf *, fd_t);
 ssize_t	 imsg_read(struct imsgbuf *);
 ssize_t	 imsg_get(struct imsgbuf *, struct imsg *);
 int	 imsg_compose(struct imsgbuf *, uint32_t, uint32_t, pid_t, int,

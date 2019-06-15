@@ -20,10 +20,10 @@
 
 #include "compat.h"
 
-int
+fd_t
 getptmfd(void)
 {
-	return (INT_MAX);
+	return (fd_t)(INT_MAX);
 }
 
 pid_t

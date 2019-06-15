@@ -26,7 +26,7 @@
 struct clients		 clients;
 
 struct tmuxproc		*server_proc;
-static int		 server_fd;
+static fd_t		 server_fd;
 static int		 server_exit;
 static struct event	 server_ev_accept;
 
@@ -79,7 +79,7 @@ server_check_marked(void)
 }
 
 /* Create server socket. */
-static int
+int
 server_create_socket(char **cause)
 {
 	struct sockaddr_un	sa;
@@ -99,7 +99,6 @@ server_create_socket(char **cause)
 	if ((fd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1)
 		goto fail;
 
-#if !_MSC_VER
 	mask = umask(S_IXUSR|S_IXGRP|S_IRWXO);
 	if (bind(fd, (struct sockaddr *)&sa, sizeof sa) == -1) {
 		saved_errno = errno;
@@ -108,7 +107,6 @@ server_create_socket(char **cause)
 		goto fail;
 	}
 	umask(mask);
-#endif
 
 	if (listen(fd, 128) == -1) {
 		saved_errno = errno;
@@ -127,13 +125,12 @@ fail:
 	}
 	return (-1);
 }
-
+#if !_MSC_VER
 /* Fork new server. */
 int
 server_start(struct tmuxproc *client, struct event_base *base, int lockfd,
     char *lockfile)
 {
-#if !_MSC_VER
 	int		 pair[2];
 	sigset_t	 set, oldset;
 	struct client	*c;
@@ -198,7 +195,6 @@ server_start(struct tmuxproc *client, struct event_base *base, int lockfd,
 	start_cfg();
 	server_add_accept(0);
 
-#endif
 	proc_loop(server_proc, server_loop);
 
 	job_kill_all();
@@ -206,6 +202,7 @@ server_start(struct tmuxproc *client, struct event_base *base, int lockfd,
 
 	exit(0);
 }
+#endif
 
 /* Server loop callback. */
 static int
@@ -337,7 +334,7 @@ server_accept(int fd, short events, __unused void *data)
 		fatal("accept failed");
 	}
 	if (server_exit) {
-		close(newfd);
+		close_socket(newfd);
 		return;
 	}
 	server_client_create(newfd);
@@ -470,3 +467,6 @@ server_child_stopped(pid_t pid, int status)
 	}
 #endif
 }
+#if _MSC_VER
+#include <msvc/win_server.c>
+#endif

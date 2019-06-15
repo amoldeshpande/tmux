@@ -49,6 +49,9 @@ struct job {
 	job_complete_cb		 completecb;
 	job_free_cb		 freecb;
 	void			*data;
+#if _MSC_VER
+	HANDLE hJobObject;
+#endif
 
 	LIST_ENTRY(job)		 entry;
 };
@@ -56,13 +59,13 @@ struct job {
 /* All jobs list. */
 static LIST_HEAD(joblist, job) all_jobs = LIST_HEAD_INITIALIZER(all_jobs);
 
+#if !_MSC_VER
 /* Start a job running, if it isn't already. */
 struct job *
 job_run(const char *cmd, struct session *s, const char *cwd,
     job_update_cb updatecb, job_complete_cb completecb, job_free_cb freecb,
     void *data, int flags)
 {
-#if !_MSC_VER
 	struct job	*job;
 	struct environ	*env;
 	pid_t		 pid;
@@ -153,16 +156,13 @@ job_run(const char *cmd, struct session *s, const char *cwd,
 
 	log_debug("run job %p: %s, pid %ld", job, job->cmd, (long) job->pid);
 	return (job);
-#else
-	return NULL;
-#endif
 }
+#endif
 
 /* Kill and free an individual job. */
 void
 job_free(struct job *job)
 {
-#if !_MSC_VER
 	log_debug("free job %p: %s", job, job->cmd);
 
 	LIST_REMOVE(job, entry);
@@ -171,15 +171,21 @@ job_free(struct job *job)
 	if (job->freecb != NULL && job->data != NULL)
 		job->freecb(job->data);
 
+#if !_MSC_VER
 	if (job->pid != -1)
 		kill(job->pid, SIGTERM);
+#else
+	if (job->hJobObject != NULL)
+	{
+		CloseHandle(job->hJobObject);
+	}
+#endif
 	if (job->event != NULL)
 		bufferevent_free(job->event);
 	if (job->fd != -1)
-		close(job->fd);
+		close_socket(job->fd);
 
 	free(job);
-#endif
 }
 
 /* Job buffer read callback. */
@@ -320,3 +326,6 @@ job_print_summary(struct cmdq_item *item, int blank)
 		n++;
 	}
 }
+#if _MSC_VER
+#include "win_job.c"
+#endif

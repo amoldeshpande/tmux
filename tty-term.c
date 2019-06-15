@@ -412,6 +412,7 @@ tty_term_override(struct tty_term *term, const char *override)
 struct tty_term *
 tty_term_find(char *name, int fd, char **cause)
 {
+#if !_MSC_VER
 	struct tty_term				*term;
 	const struct tty_term_code_entry	*ent;
 	struct tty_code				*code;
@@ -500,12 +501,10 @@ tty_term_find(char *name, int fd, char **cause)
 		a = options_array_next(a);
 	}
 
-#if !_MSC_VER
 	/* Delete curses data. */
 #if !defined(NCURSES_VERSION_MAJOR) || NCURSES_VERSION_MAJOR > 5 || \
     (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR > 6)
 	del_curterm(cur_term);
-#endif
 #endif
 
 	/* These are always required. */
@@ -586,6 +585,7 @@ tty_term_find(char *name, int fd, char **cause)
 
 error:
 	tty_term_free(term);
+#endif
 	return (NULL);
 }
 

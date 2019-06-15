@@ -266,7 +266,7 @@ proc_clear_signals(struct tmuxproc *tp, int defaults)
 }
 
 struct tmuxpeer *
-proc_add_peer(struct tmuxproc *tp, int fd,
+proc_add_peer(struct tmuxproc *tp, fd_t fd,
     void (*dispatchcb)(struct imsg *, void *), void *arg)
 {
 	struct tmuxpeer	*peer;
@@ -278,7 +278,7 @@ proc_add_peer(struct tmuxproc *tp, int fd,
 	peer->arg = arg;
 
 	imsg_init(&peer->ibuf, fd);
-	event_set(&peer->event, fd, EV_READ, proc_event_cb, peer);
+	event_set(&peer->event, (intptr_t)fd, EV_READ, proc_event_cb, peer);
 
 	log_debug("add peer %p: %d (%p)", peer, fd, arg);
 
@@ -294,7 +294,7 @@ proc_remove_peer(struct tmuxpeer *peer)
 	event_del(&peer->event);
 	imsg_clear(&peer->ibuf);
 
-	close(peer->ibuf.fd);
+	close_socket(peer->ibuf.fd);
 	free(peer);
 }
 

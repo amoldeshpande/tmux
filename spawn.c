@@ -41,7 +41,10 @@
  * - remaining environment, comes from the session.
  */
 
-static void
+#if !_MSC_VER
+static 
+#endif
+void
 spawn_log(const char *from, struct spawn_context *sc)
 {
 	struct session		*s = sc->s;
@@ -189,6 +192,7 @@ spawn_window(struct spawn_context *sc, char **cause)
 	return (sc->wl);
 }
 
+#if !_MSC_VER
 struct window_pane *
 spawn_pane(struct spawn_context *sc, char **cause)
 {
@@ -435,3 +439,4 @@ complete:
 		notify_window("window-layout-changed", w);
 	return (new_wp);
 }
+#endif

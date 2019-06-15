@@ -36,7 +36,7 @@ ibuf_open(size_t len)
 		return (NULL);
 	}
 	buf->size = buf->max = len;
-	buf->fd = -1;
+	buf->fd = INVALID_FD;
 
 	return (buf);
 }
@@ -181,7 +181,7 @@ void
 msgbuf_init(struct msgbuf *msgbuf)
 {
 	msgbuf->queued = 0;
-	msgbuf->fd = -1;
+	msgbuf->fd = INVALID_FD;
 	TAILQ_INIT(&msgbuf->bufs);
 }
 
@@ -215,7 +215,6 @@ msgbuf_clear(struct msgbuf *msgbuf)
 int
 msgbuf_write(struct msgbuf *msgbuf)
 {
-#if !_MSC_VER
 	struct iovec	 iov[IOV_MAX];
 	struct ibuf	*buf;
 	unsigned int	 i = 0;
@@ -272,15 +271,12 @@ again:
 	 * this works because fds are passed one at a time
 	 */
 	if (buf != NULL && buf->fd != -1) {
-		close(buf->fd);
-		buf->fd = -1;
+		close_socket(buf->fd);
+		buf->fd = INVALID_FD;
 	}
 
 	msgbuf_drain(msgbuf, n);
 	return (1);
-#else
-	return -1;
-#endif
 }
 
 static void
@@ -296,7 +292,7 @@ ibuf_dequeue(struct msgbuf *msgbuf, struct ibuf *buf)
 	TAILQ_REMOVE(&msgbuf->bufs, buf, entry);
 
 	if (buf->fd != -1)
-		close(buf->fd);
+		close_socket(buf->fd);
 
 	msgbuf->queued--;
 	ibuf_free(buf);

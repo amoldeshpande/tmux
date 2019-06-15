@@ -25,7 +25,7 @@ struct environ	*global_environ;
 
 struct timeval	 start_time;
 const char	*socket_path;
-int		 ptm_fd = -1;
+fd_t ptm_fd = (fd_t)-1;
 const char	*shell_command;
 
 static __dead void	 usage(void);
@@ -38,7 +38,7 @@ static __dead void
 usage(void)
 {
 	fprintf(stderr,
-	    "usage: %s [-2CluvV] [-c shell-command] [-f file] [-L socket-name]\n"
+	    "usage: %s [-2CluvVW] [-c shell-command] [-f file] [-L socket-name]\n"
 	    "            [-S socket-path] [command [flags]]\n",
 	    getprogname());
 	exit(1);
@@ -89,6 +89,12 @@ areshell(const char *shell)
 		return (1);
 	return (0);
 }
+#if !_MSC_VER
+const char* const get_tmp_dir()
+{
+	return _PATH_TMP;
+}
+#endif
 
 static char *
 make_label(const char *label, char **cause)
@@ -106,7 +112,7 @@ make_label(const char *label, char **cause)
 	if ((s = getenv("TMUX_TMPDIR")) != NULL && *s != '\0')
 		xasprintf(&base, "%s/tmux-%ld", s, (long)uid);
 	else
-		xasprintf(&base, "%s/tmux-%ld", _PATH_TMP, (long)uid);
+		xasprintf(&base, "%s/tmux-%ld", get_tmp_dir(), (long)uid);
 	if (realpath(base, resolved) == NULL &&
 	    strlcpy(resolved, base, sizeof resolved) >= sizeof resolved) {
 		errno = ERANGE;
@@ -136,10 +142,10 @@ fail:
 	return (NULL);
 }
 
-void
-setblocking(int fd, int state)
-{
 #if !_MSC_VER
+void
+setblocking(fd_t fd, int state)
+{
 	int mode;
 
 	if ((mode = fcntl(fd, F_GETFL)) != -1) {
@@ -149,8 +155,8 @@ setblocking(int fd, int state)
 			mode &= ~O_NONBLOCK;
 		fcntl(fd, F_SETFL, mode);
 	}
-#endif
 }
+#endif
 
 const char *
 find_cwd(void)
@@ -206,16 +212,18 @@ main(int argc, char **argv)
 	int					 opt, flags, keys;
 	const struct options_table_entry	*oe;
 
+#if !_MSC_VER
 	if (setlocale(LC_CTYPE, "en_US.UTF-8") == NULL &&
 	    setlocale(LC_CTYPE, "C.UTF-8") == NULL) {
 		if (setlocale(LC_CTYPE, "") == NULL)
 			errx(1, "invalid LC_ALL, LC_CTYPE or LANG");
-#if !_MSC_VER
 		s = nl_langinfo(CODESET);
 		if (strcasecmp(s, "UTF-8") != 0 && strcasecmp(s, "UTF8") != 0)
 			errx(1, "need UTF-8 locale (LC_CTYPE) but have %s", s);
-#endif
 	}
+#else
+	win_environ_init();
+#endif
 
 	setlocale(LC_TIME, "");
 	tzset();
@@ -226,7 +234,7 @@ main(int argc, char **argv)
 		flags = 0;
 
 	label = path = NULL;
-	while ((opt = getopt(argc, argv, "2c:Cdf:lL:qS:uUVv")) != -1) {
+	while ((opt = getopt(argc, argv, "2c:Cdf:lL:qS:uUVvW")) != -1) {
 		switch (opt) {
 		case '2':
 			flags |= CLIENT_256COLOURS;
@@ -264,6 +272,9 @@ main(int argc, char **argv)
 			break;
 		case 'v':
 			log_add_level();
+			break;
+		case 'W':
+			flags |= CLIENT_START_WINDOWS_SERVER;
 			break;
 		default:
 			usage();

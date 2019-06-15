@@ -408,6 +408,57 @@
     <ClCompile Include="..\compat\imsg-buffer.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\environ.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\compat\freezero.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\compat\reallocarray.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\compat\recallocarray.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\compat\fgetln.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\compat\fparseln.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\compat\unvis.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\compat\explicit_bzero.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\compat\err.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\compat\fdforkpty.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\compat\setproctitle.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\compat\memmem.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\compat\getdtablecount.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="compat_c11.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mk_wcwidth.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vc_compat.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="send_recv_msg_compat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\compat.h">
@@ -434,7 +485,7 @@
     <ClInclude Include="..\compat\vis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\compat\msvc\vc_compat.h">
+    <ClInclude Include="vc_compat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

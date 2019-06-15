@@ -15,15 +15,6 @@
  * IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-
-#include <sys/types.h>
-
-#include <stdlib.h>
-#include <string.h>
-#if !_MSC_VER
-#include <unistd.h>
-#endif
-
 #include "tmux.h"
 
 /*

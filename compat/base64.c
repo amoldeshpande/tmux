@@ -51,6 +51,7 @@
 #include <resolv.h>
 #else
 #include <vc_compat.h>
+#pragma warning(disable:4131)
 #endif
 
 #include <ctype.h>

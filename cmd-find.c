@@ -16,15 +16,6 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-
-#if !_MSC_VER
-#include <fnmatch.h>
-#endif
-#include <limits.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "tmux.h"
 
 static int	cmd_find_session_better(struct session *, struct session *,

@@ -22,6 +22,7 @@
 
 #include "compat.h"
 
+
 int
 setenv(const char *name, const char *value, __unused int overwrite)
 {

@@ -2057,7 +2057,6 @@ format_defaults_pane(struct format_tree *ft, struct window_pane *wp)
 {
 	struct window			*w = wp->window;
 	struct grid			*gd = wp->base.grid;
-	int  				 status = wp->status;
 	u_int				 idx;
 	struct window_mode_entry	*wme;
 

@@ -273,7 +273,6 @@ tty_start_tty(struct tty *tty)
 		event_add(&tty->event_in, NULL);
 
 		memcpy(&tio, &tty->tio, sizeof tio);
-#if !_MSC_VER
 		tio.c_iflag &= ~(IXON|IXOFF|ICRNL|INLCR|IGNCR|IMAXBEL|ISTRIP);
 		tio.c_iflag |= IGNBRK;
 		tio.c_oflag &= ~(OPOST|ONLCR|OCRNL|ONLRET);
@@ -283,7 +282,6 @@ tty_start_tty(struct tty *tty)
 		tio.c_cc[VTIME] = 0;
 		if (tcsetattr(tty->fd, TCSANOW, &tio) == 0)
 			tcflush(tty->fd, TCIOFLUSH);
-#endif
 	}
 
 	tty_putcode(tty, TTYC_SMCUP);
