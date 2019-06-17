@@ -459,6 +459,9 @@
     <ClCompile Include="send_recv_msg_compat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="termios.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\compat.h">

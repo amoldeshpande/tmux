@@ -18,3 +18,5 @@ Makefile.in
 configure
 tmux.1.*
 *.dSYM
+msvc/x64/
+*.user

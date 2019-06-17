@@ -223,7 +223,7 @@ msgbuf_write(struct msgbuf *msgbuf)
 	struct cmsghdr	*cmsg;
 	union {
 		struct cmsghdr	hdr;
-		char		buf[CMSG_SPACE(sizeof(int))];
+		char		buf[CMSG_SPACE(sizeof(fd_t))];
 	} cmsgbuf;
 
 	memset(&iov, 0, sizeof(iov));
@@ -246,10 +246,10 @@ msgbuf_write(struct msgbuf *msgbuf)
 		msg.msg_control = (caddr_t)&cmsgbuf.buf;
 		msg.msg_controllen = sizeof(cmsgbuf.buf);
 		cmsg = CMSG_FIRSTHDR(&msg);
-		cmsg->cmsg_len = CMSG_LEN(sizeof(int));
+		cmsg->cmsg_len = CMSG_LEN(sizeof(fd_t));
 		cmsg->cmsg_level = SOL_SOCKET;
 		cmsg->cmsg_type = SCM_RIGHTS;
-		*(int *)CMSG_DATA(cmsg) = buf->fd;
+		*(fd_t *)CMSG_DATA(cmsg) = buf->fd;
 	}
 
 again:
@@ -271,7 +271,7 @@ again:
 	 * this works because fds are passed one at a time
 	 */
 	if (buf != NULL && buf->fd != -1) {
-		close_socket(buf->fd);
+		close(buf->fd);
 		buf->fd = INVALID_FD;
 	}
 
@@ -292,7 +292,7 @@ ibuf_dequeue(struct msgbuf *msgbuf, struct ibuf *buf)
 	TAILQ_REMOVE(&msgbuf->bufs, buf, entry);
 
 	if (buf->fd != -1)
-		close_socket(buf->fd);
+		close(buf->fd);
 
 	msgbuf->queued--;
 	ibuf_free(buf);

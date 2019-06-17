@@ -76,11 +76,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);ssize_t=SSIZE_T;_CRT_SECURE_NO_WARNINGS; _CRT_NONSTDC_NO_DEPRECATE;_CRT_NO_POSIX_ERROR_CODES</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_DEBUG;_MBCS;%(PreprocessorDefinitions);ssize_t=SSIZE_T;_CRT_SECURE_NO_WARNINGS; _CRT_NONSTDC_NO_DEPRECATE;_CRT_NO_POSIX_ERROR_CODES</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>h:\github\vcpkg\install\x64-windows-static\include;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(ProjectDir)..;$(ProjectDir)..\compat;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <SupportJustMyCode>false</SupportJustMyCode>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -93,11 +95,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);ssize_t=SSIZE_T;_CRT_SECURE_NO_WARNINGS; _CRT_NONSTDC_NO_DEPRECATE;_CRT_NO_POSIX_ERROR_CODES</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_DEBUG;_MBCS;%(PreprocessorDefinitions);ssize_t=SSIZE_T;_CRT_SECURE_NO_WARNINGS; _CRT_NONSTDC_NO_DEPRECATE;_CRT_NO_POSIX_ERROR_CODES</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>h:\github\vcpkg\install\x64-windows-static\include;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(ProjectDir)..;$(ProjectDir)..\compat;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <SupportJustMyCode>false</SupportJustMyCode>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -112,7 +116,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);ssize_t=SSIZE_T;_CRT_SECURE_NO_WARNINGS; _CRT_NONSTDC_NO_DEPRECATE;_CRT_NO_POSIX_ERROR_CODES</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_DEBUG;_MBCS;%(PreprocessorDefinitions);ssize_t=SSIZE_T;_CRT_SECURE_NO_WARNINGS; _CRT_NONSTDC_NO_DEPRECATE;_CRT_NO_POSIX_ERROR_CODES</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>h:\github\vcpkg\install\x64-windows-static\include;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(ProjectDir)..;$(ProjectDir)..\compat;</AdditionalIncludeDirectories>
@@ -133,7 +137,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);ssize_t=SSIZE_T;_CRT_SECURE_NO_WARNINGS; _CRT_NONSTDC_NO_DEPRECATE;_CRT_NO_POSIX_ERROR_CODES</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_DEBUG;_MBCS;%(PreprocessorDefinitions);ssize_t=SSIZE_T;_CRT_SECURE_NO_WARNINGS; _CRT_NONSTDC_NO_DEPRECATE;_CRT_NO_POSIX_ERROR_CODES</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>h:\github\vcpkg\install\x64-windows-static\include;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(ProjectDir)..;$(ProjectDir)..\compat;</AdditionalIncludeDirectories>
@@ -233,6 +237,7 @@
     <ClCompile Include="compat_c11.cpp" />
     <ClCompile Include="mk_wcwidth.c" />
     <ClCompile Include="send_recv_msg_compat.cpp" />
+    <ClCompile Include="termios.c" />
     <ClCompile Include="vc_compat.c" />
     <ClCompile Include="..\compat\reallocarray.c" />
     <ClCompile Include="..\compat\recallocarray.c" />

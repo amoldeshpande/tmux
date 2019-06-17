@@ -82,7 +82,7 @@ tty_create_log(void)
 }
 
 int
-tty_init(struct tty *tty, struct client *c, int fd, char *term)
+tty_init(struct tty *tty, struct client *c, fd_t fd, char *term)
 {
 	if (!isatty(fd))
 		return (-1);
@@ -139,7 +139,7 @@ tty_set_size(struct tty *tty, u_int sx, u_int sy)
 }
 
 static void
-tty_read_callback(__unused int fd, __unused short events, void *data)
+tty_read_callback(__unused fd_t fd, __unused short events, void *data)
 {
 	struct tty	*tty = data;
 	struct client	*c = tty->client;
@@ -159,7 +159,7 @@ tty_read_callback(__unused int fd, __unused short events, void *data)
 }
 
 static void
-tty_timer_callback(__unused int fd, __unused short events, void *data)
+tty_timer_callback(__unused fd_t fd, __unused short events, void *data)
 {
 	struct tty	*tty = data;
 	struct client	*c = tty->client;
@@ -204,7 +204,7 @@ tty_block_maybe(struct tty *tty)
 }
 
 static void
-tty_write_callback(__unused int fd, __unused short events, void *data)
+tty_write_callback(__unused fd_t fd, __unused short events, void *data)
 {
 	struct tty	*tty = data;
 	struct client	*c = tty->client;

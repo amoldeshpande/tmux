@@ -95,9 +95,9 @@ again:
 			 * more than one fd, and we must close them.
 			 */
 			j = ((char *)cmsg + cmsg->cmsg_len -
-			    (char *)CMSG_DATA(cmsg)) / sizeof(int);
+			    (char *)CMSG_DATA(cmsg)) / sizeof(fd_t);
 			for (i = 0; i < j; i++) {
-				fd = ((int *)CMSG_DATA(cmsg))[i];
+				fd = ((fd_t *)CMSG_DATA(cmsg))[i];
 				if (ifd != NULL) {
 					ifd->fd = fd;
 					TAILQ_INSERT_TAIL(&ibuf->fds, ifd,
@@ -143,7 +143,7 @@ imsg_get(struct imsgbuf *ibuf, struct imsg *imsg)
 	if (imsg->hdr.flags & IMSGF_HASFD)
 		imsg->fd = imsg_get_fd(ibuf);
 	else
-		imsg->fd = -1;
+		imsg->fd = INVALID_FD;
 
 	memcpy(imsg->data, ibuf->r.rptr, datalen);
 

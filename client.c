@@ -252,7 +252,6 @@ client_main(struct event_base *base, int argc, char **argv, int flags)
 	if (flags & CLIENT_START_WINDOWS_SERVER)
 	{
 		run_windows_server(client_proc,base);
-		exit(0);
 	}
 #endif
 

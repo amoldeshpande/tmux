@@ -72,7 +72,7 @@ proc_event_cb(__unused int fd, short events, void *arg)
 			log_debug("peer %p message %d", peer, imsg.hdr.type);
 
 			if (peer_check_version(peer, &imsg) != 0) {
-				if (imsg.fd != -1)
+				if (imsg.fd != INVALID_FD)
 					close(imsg.fd);
 				imsg_free(&imsg);
 				break;
@@ -294,7 +294,7 @@ proc_remove_peer(struct tmuxpeer *peer)
 	event_del(&peer->event);
 	imsg_clear(&peer->ibuf);
 
-	close_socket(peer->ibuf.fd);
+	close(peer->ibuf.fd);
 	free(peer);
 }
 

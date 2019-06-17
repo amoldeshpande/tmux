@@ -334,7 +334,7 @@ server_accept(int fd, short events, __unused void *data)
 		fatal("accept failed");
 	}
 	if (server_exit) {
-		close_socket(newfd);
+		close(newfd);
 		return;
 	}
 	server_client_create(newfd);

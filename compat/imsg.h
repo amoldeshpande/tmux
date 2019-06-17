@@ -49,7 +49,7 @@ struct ibuf_read {
 
 struct imsg_fd {
 	TAILQ_ENTRY(imsg_fd)	entry;
-	int			fd;
+	fd_t			fd;
 };
 
 struct imsgbuf {
@@ -72,7 +72,7 @@ struct imsg_hdr {
 
 struct imsg {
 	struct imsg_hdr	 hdr;
-	int		 fd;
+	fd_t		 fd;
 	void		*data;
 };
 

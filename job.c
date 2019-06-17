@@ -183,7 +183,7 @@ job_free(struct job *job)
 	if (job->event != NULL)
 		bufferevent_free(job->event);
 	if (job->fd != -1)
-		close_socket(job->fd);
+		close(job->fd);
 
 	free(job);
 }
